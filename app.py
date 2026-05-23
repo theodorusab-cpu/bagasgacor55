@@ -102,5 +102,4 @@ with col_chart1:
     # Titik Operasi Kerja Saat ini berdasarkan slider
     fig_hq.add_trace(go.Scatter(x=[debit], y=[head], mode='markers', name='Titik Kerja', marker=dict(color='#ef4444', size=14, symbol='cross')))
     
-    fig_hq.update_layout(
-        xaxis=dict(
+    
