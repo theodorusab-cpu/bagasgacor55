@@ -4,14 +4,14 @@ import plotly.graph_objects as go
 # Set layout halaman menjadi lebar agar mirip dashboard profesional
 st.set_page_config(layout="wide", page_title="Kalkulator Daya Pompa Air")
 
-st.title("🚰 Kalkulator Daya Pompa Air")
+st.title("🚰 Daya Pompa Air")
 st.caption("Estimasi daya listrik yang dibutuhkan berdasarkan parameter pompa")
 
 # --- GRID ATAS: INPUT PARAMETER & OUTPUT DAYA ---
 col_input, col_output = st.columns([4, 4])
 
 with col_input:
-    st.write("### PARAMETER INPUT")
+    st.write("## INPUT")
     
     # Slider Input sesuai gambar
     debit = st.slider("Debit air (Q)", min_value=0.001, max_value=0.200, value=0.086, step=0.001, format="%.3f m³/s")
