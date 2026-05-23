@@ -5,7 +5,7 @@ import numpy as np
 # Set layout halaman menjadi lebar agar dashboard terlihat profesional
 st.set_page_config(layout="wide", page_title="Kalkulator Daya Pompa Air")
 
-st.title("🚰 Kalkulator Daya Pompa Air & Kurva Performa")
+st.title("🚰Daya Pompa Air & Kurva Performa")
 st.caption("Estimasi daya listrik dan analisis grafik karakteristik pompa")
 
 # --- GRID ATAS: INPUT PARAMETER & OUTPUT DAYA ---
