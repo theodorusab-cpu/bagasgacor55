@@ -1,17 +1,21 @@
 import streamlit as st
 import numpy as np
 import plotly.graph_objects as go
-import time
 
-st.title("💧 Pompa 3D Gacor Edition")
+st.title("🚰 Pompa (Improved Animation)")
 
 run = st.toggle("Jalankan Animasi")
 
-placeholder = st.empty()
-
 debit = st.slider("Debit", 0.01, 0.2, 0.05)
 
-def create_frame(angle):
+placeholder = st.empty()
+
+# simpan angle di session_state biar tidak reset terus
+if "angle" not in st.session_state:
+    st.session_state.angle = 0
+
+
+def create_frame(angle, debit):
     theta = np.linspace(0, 2*np.pi, 40)
     z = np.linspace(0, 5, 20)
     theta, z = np.meshgrid(theta, z)
@@ -22,26 +26,28 @@ def create_frame(angle):
 
     fig = go.Figure()
 
-    # BODY POMPA (silinder transparan)
-    fig.add_surface(x=x, y=y, z=z, opacity=0.3, showscale=False)
+    # BODY POMPA
+    fig.add_surface(x=x, y=y, z=z, opacity=0.25, showscale=False)
 
-    # IMPELLER (4 blade)
+    # IMPELLER (berputar)
     for k in range(4):
-        a = np.radians(angle + k*90)
+        a = np.radians(angle + k * 90)
         fig.add_trace(go.Scatter3d(
             x=[0, np.cos(a)],
             y=[0, np.sin(a)],
             z=[2.5, 2.5],
             mode='lines',
-            line=dict(width=6)
+            line=dict(width=6, color='orange')
         ))
 
-    # AIR PARTIKEL
-    t = np.linspace(0, 1, 20)
+    # AIR FLOW (dipengaruhi debit)
+    t = np.linspace(0, 1, 30)
+    flow_speed = 10 + debit * 50
+
     fig.add_trace(go.Scatter3d(
-        x=np.sin(t*10 + angle/10),
+        x=np.sin(t * flow_speed + angle/10),
         y=np.zeros_like(t),
-        z=t*5,
+        z=t * 5,
         mode='markers',
         marker=dict(size=3, color='cyan')
     ))
@@ -58,10 +64,11 @@ def create_frame(angle):
     return fig
 
 
+# ANIMASI LOOP AMAN (tanpa while True)
 if run:
-    angle = 0
-    while True:
-        fig = create_frame(angle)
-        placeholder.plotly_chart(fig, use_container_width=True)
-        angle += 10
-        time.sleep(0.05)
+    st.session_state.angle += 8
+    fig = create_frame(st.session_state.angle, debit)
+    placeholder.plotly_chart(fig, use_container_width=True)
+    st.autorefresh(interval=50, key="pump_refresh")
+else:
+    placeholder.info("Matikan toggle untuk menghentikan animasi.")
